@@ -1,0 +1,10 @@
+apiVersion: ziad.com/v1alpha1
+kind: XStorage
+metadata:
+  # Only claims are namespaced, unlike XRs.
+  name: storage
+  namespace: crossplane-test
+spec:
+  compositionRef:
+    name: storage-composition
+

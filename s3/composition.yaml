@@ -1,0 +1,57 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: storage-composition
+  labels:
+    crossplane.io/xrd: xstorages.ziad.com
+    provider: aws
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: ziad.com/v1alpha1
+    kind: XStorage
+  resources:
+    - name: s3Bucket
+      base:
+        apiVersion: s3.aws.upbound.io/v1beta1
+        kind: Bucket
+        metadata:
+          name: "devoteam-ziad-s3-test-eu-west-1"
+        spec:
+          forProvider:
+            region: "eu-west-1"
+          providerConfigRef:
+            name: default
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: "spec.parameters.location"
+          toFieldPath: "spec.forProvider.region"
+          transforms:
+            - type: map
+              map:
+                EU: "eu-west-1"
+                US: "us-east-1"
+    - name: dynamoDB
+      base:
+        apiVersion: dynamodb.aws.upbound.io/v1beta1
+        kind: Table
+        metadata:
+          name: "devoteam-ziad-ddb-test-eu-west-1"
+        spec:
+          forProvider:
+            region: "eu-west-1"
+            writeCapacity: 1
+            readCapacity: 1
+            attribute:
+              - name: S3ID
+                type: S
+            hashKey: S3ID
+      patches:
+        - type: FromCompositeFieldPath
+          fromFieldPath: "spec.parameters.location"
+          toFieldPath: "spec.forProvider.region"
+          transforms:
+            - type: map
+              map:
+                EU: "eu-west-1"
+                US: "us-east-1"

@@ -1,0 +1,43 @@
+apiVersion: apiextensions.crossplane.io/v1
+# kind is camelcase
+kind: CompositeResourceDefinition
+metadata:
+  labels:
+    # An optional convention is to include a label of the XRD. This allows
+    # easy discovery of compatible Compositions.
+    crossplane.io/xrd: xstorages.ziad.com
+  # 'x<plural>.<group>'
+  name: xstorages.ziad.com
+spec:
+  group: ziad.com
+  names:
+    kind: XStorage
+    plural: xstorages
+  claimNames:
+    kind: StorageClaim
+    plural: storageclaims
+  defaultCompositionRef:
+    name: storage-composition
+
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            # We define all needed parameters here one has to provide as XR or Claim spec.parameters
+            properties:
+              spec:
+                type: object
+                properties:
+                  parameters:
+                    type: object
+                    properties:
+                      location:
+                        type: string
+                    # required:
+                    #   - location
