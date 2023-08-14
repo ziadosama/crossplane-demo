@@ -11,6 +11,9 @@
   - [Apply Single resource](#apply-single-resource)
     - [Apply single managed resource](#apply-single-managed-resource)
   - [Apply full composition](#apply-full-composition)
+    - [Apply API](#apply-api)
+    - [Apply composition containing managed resources](#apply-composition-containing-managed-resources)
+    - [Create resources](#create-resources)
 
 ## Setup
 ### Enable the Crossplane Helm Chart repository:
@@ -75,7 +78,7 @@ EOF
 kubectl apply -f s3.yaml
 ```
 ## Apply full composition
-```
+
 ### Apply API
 ```
 kubectl apply -f composition/definition.yaml
